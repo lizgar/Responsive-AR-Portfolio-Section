@@ -206,5 +206,25 @@
         setDebug("promise error: " + event.reason);
       });
     </script>
+
+    <script>
+  window.addEventListener("arjs-nft-loaded", () => {
+    console.log("NFT cargado correctamente");
+    const debug = document.getElementById("debug");
+    if (debug) debug.textContent = "Estado: NFT cargado. Apunta a la carta.";
+  });
+
+  window.addEventListener("markerFound", () => {
+    console.log("Carta detectada");
+    const debug = document.getElementById("debug");
+    if (debug) debug.textContent = "Estado: carta detectada.";
+  });
+
+  window.addEventListener("markerLost", () => {
+    console.log("Carta perdida");
+    const debug = document.getElementById("debug");
+    if (debug) debug.textContent = "Estado: carta perdida.";
+  });
+</script>
   </body>
 </html>
