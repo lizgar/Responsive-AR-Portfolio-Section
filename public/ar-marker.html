@@ -2,6 +2,10 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
     <title>AR Marker Test</title>
 
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
@@ -16,6 +20,32 @@
         overflow: hidden;
         background: #000;
         font-family: Arial, sans-serif;
+      }
+
+      #start-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 24px;
+        background: #050509;
+        color: white;
+        text-align: center;
+      }
+
+      #start-screen button,
+      .close {
+        padding: 12px 18px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: #00d4ff;
+        color: #001018;
+        font-weight: 700;
+        cursor: pointer;
       }
 
       .label {
@@ -35,13 +65,22 @@
         top: 16px;
         right: 16px;
         z-index: 9999;
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.25);
         background: rgba(0, 0, 0, 0.72);
         color: white;
-        font-size: 14px;
-        cursor: pointer;
+      }
+
+      #debug {
+        position: fixed;
+        bottom: 12px;
+        left: 12px;
+        right: 12px;
+        z-index: 9999;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.72);
+        color: #00ff88;
+        font-size: 12px;
+        line-height: 1.4;
       }
 
       .a-enter-vr,
@@ -50,29 +89,125 @@
       .a-loader-title {
         display: none !important;
       }
+
+      video,
+      .arjs-video {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        object-fit: cover !important;
+        z-index: 1 !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+
+      a-scene,
+      canvas.a-canvas {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 2 !important;
+        background: transparent !important;
+      }
     </style>
   </head>
 
   <body>
+    <div id="start-screen">
+      <h1>Realidad Aumentada</h1>
+      <p>
+        Presiona iniciar y permite el acceso a la cámara. Luego apunta al marcador Hiro.
+      </p>
+      <button id="start-button">Iniciar cámara AR</button>
+    </div>
+
     <div class="label">Apunta la cámara al marcador Hiro</div>
     <button class="close" onclick="window.location.href='./'">Volver</button>
+    <div id="debug">Estado: esperando inicio...</div>
 
-    <a-scene
-      embedded
-      vr-mode-ui="enabled: false"
-      device-orientation-permission-ui="enabled: false"
-      renderer="alpha: true; antialias: true; logarithmicDepthBuffer: true;"
-      arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;"
-    >
-      <a-marker preset="hiro">
-        <a-box
-          position="0 0.5 0"
-          scale="0.7 0.7 0.7"
-          material="opacity: 0.9;"
-        ></a-box>
-      </a-marker>
+    <div id="ar-root"></div>
 
-      <a-entity camera></a-entity>
-    </a-scene>
+    <script>
+      const startScreen = document.getElementById("start-screen");
+      const startButton = document.getElementById("start-button");
+      const arRoot = document.getElementById("ar-root");
+      const debug = document.getElementById("debug");
+
+      function setDebug(message) {
+        debug.textContent = "Estado: " + message;
+        console.log("[AR DEBUG]", message);
+      }
+
+      function createARScene() {
+        setDebug("creando escena AR...");
+
+        arRoot.innerHTML = `
+          <a-scene
+            embedded
+            vr-mode-ui="enabled: false"
+            device-orientation-permission-ui="enabled: false"
+            renderer="alpha: true; antialias: true; logarithmicDepthBuffer: true;"
+            arjs="
+              sourceType: webcam;
+              videoTexture: true;
+              debugUIEnabled: false;
+              trackingMethod: best;
+              sourceWidth: 640;
+              sourceHeight: 480;
+              displayWidth: 640;
+              displayHeight: 480;
+            "
+          >
+            <a-marker preset="hiro">
+              <a-box
+                position="0 0.5 0"
+                scale="0.7 0.7 0.7"
+                material="color: #00d4ff; opacity: 0.9;"
+              ></a-box>
+            </a-marker>
+
+            <a-entity camera></a-entity>
+          </a-scene>
+        `;
+
+        setDebug("escena creada, solicitando cámara...");
+      }
+
+      startButton.addEventListener("click", () => {
+        startScreen.style.display = "none";
+        createARScene();
+
+        setTimeout(() => {
+          const videos = document.querySelectorAll("video");
+          const canvas = document.querySelector("canvas");
+
+          setDebug(
+            "videos encontrados: " +
+              videos.length +
+              " | canvas: " +
+              (canvas ? "sí" : "no")
+          );
+
+          videos.forEach((video) => {
+            video.setAttribute("playsinline", "");
+            video.setAttribute("muted", "");
+            video.play().catch((error) => {
+              setDebug("video play error: " + error.name);
+            });
+          });
+        }, 2500);
+      });
+
+      window.addEventListener("error", (event) => {
+        setDebug("error: " + event.message);
+      });
+
+      window.addEventListener("unhandledrejection", (event) => {
+        setDebug("promise error: " + event.reason);
+      });
+    </script>
   </body>
 </html>
