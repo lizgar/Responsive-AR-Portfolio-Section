@@ -46,14 +46,14 @@ export const projects: Project[] = [
       format: "GLB / USDZ",
     },
     // ─── EDITAR: Reemplaza con tus rutas reales ───
-    modelPath: "./src/app/data/projects/mew-pokemon_1K.glb",
+    modelPath: "https://lizgar.github.io/ImgDesignare/Mew.glb",
     iosModelPath: "./src/app/data/projects/mew-pokemon_1K.usdz",
     posterImage:
-      "./src/app/data/projects/Mew_Front.png",
+      "https://lizgar.github.io/ImgDesignare/Mew_Front.png",
     featured: true,
     year: "2024",
   },
-  {
+  /*{
     id: 2,
     title: "Relicario Arcano",
     subtitle: "Prop Fantástico",
@@ -178,5 +178,5 @@ export const projects: Project[] = [
     posterImage:
       "https://images.unsplash.com/photo-1586120695969-927e34a95cef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhdWdtZW50ZWQlMjByZWFsaXR5JTIwaW50ZXJhY3RpdmUlMjBvYmplY3QlMjBkaWdpdGFsJTIwYXJ0fGVufDF8fHx8MTc3NzkxNDM0NHww&ixlib=rb-4.1.0&q=80&w=1080",
     year: "2025",
-  },
+  },*/
 ];

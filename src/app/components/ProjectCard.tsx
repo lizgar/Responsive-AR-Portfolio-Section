@@ -146,25 +146,7 @@ export function ProjectCard({ project, index, onSelect }: ProjectCardProps) {
             backdropFilter: "blur(2px)",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "12px 24px",
-              borderRadius: 8,
-              background: "rgba(0,212,255,0.15)",
-              border: "1px solid rgba(0,212,255,0.5)",
-              color: "#00d4ff",
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 600,
-              fontSize: 14,
-              letterSpacing: "0.03em",
-            }}
-          >
-            <Maximize2 size={16} />
-            Ver en 3D
-          </div>
+          
         </div>
 
         {/* Year */}
