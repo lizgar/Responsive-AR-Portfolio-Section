@@ -154,20 +154,19 @@
     arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
   >
     <a-nft
-        type="nft"
-        url="https://lizgar.github.io/Responsive-AR-Portfolio-Section/assets/Mew-images"
-        smooth="true"
-        smoothCount="10"
-        smoothTolerance=".01"
-        smoothThreshold="5">
-          <!-- as a child of the a-nft entity, you can define the content to show. here's a GLTF model entity -->
-          <a-entity
-          gltf-model="https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf"
-              scale="5 5 5"
-              position="100 100 0"
-          >
-          </a-entity>
-      </a-nft>
+  type="nft"
+  url="https://lizgar.github.io/Responsive-AR-Portfolio-Section/assets/Mew-images"
+  smooth="true"
+  smoothCount="10"
+  smoothTolerance=".01"
+  smoothThreshold="5"
+>
+  <a-box
+    position="370 520 0"
+    scale="80 80 80"
+    material="color: #00d4ff; opacity: 0.9;"
+  ></a-box>
+</a-nft>
 
     <a-entity camera></a-entity>
   </a-scene>
