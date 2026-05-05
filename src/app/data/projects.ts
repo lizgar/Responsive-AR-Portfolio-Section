@@ -46,10 +46,10 @@ export const projects: Project[] = [
       format: "GLB / USDZ",
     },
     // ─── EDITAR: Reemplaza con tus rutas reales ───
-    modelPath: "src/app/data/projects/mew-pokemon_1K.glb",
-    iosModelPath: "src/app/data/projects/mew-pokemon_1K.usdz",
+    modelPath: "./src/app/data/projects/mew-pokemon_1K.glb",
+    iosModelPath: "./src/app/data/projects/mew-pokemon_1K.usdz",
     posterImage:
-      "src/app/data/projects/Mew_Front.png",
+      "./src/app/data/projects/Mew_Front.png",
     featured: true,
     year: "2024",
   },
