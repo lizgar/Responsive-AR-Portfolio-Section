@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
     plugins: [react()],
-    base: '/DesignareSemillero/',
+    base: '/Responsive-AR-Portfolio-Section/',
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
