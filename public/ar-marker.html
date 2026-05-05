@@ -40,6 +40,19 @@
         font-size: 14px;
         text-align: center;
       }
+      .back-button {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 20;
+        background: rgba(0, 0, 0, 0.75);
+        color: white;
+        padding: 10px 14px;
+        border-radius: 999px;
+        text-decoration: none;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+      }
     </style>
   </head>
 
@@ -48,6 +61,9 @@
       Apunta la cámara hacia la imagen marcador
     </div>
 
+    <a href="./index.html" class="back-button">
+  ← Volver al portafolio
+    </a>
     <a-scene
       mindar-image="imageTargetSrc: https://lizgar.github.io/ImgDesignare/targets.mind; autoStart: true;"
       color-space="sRGB"
