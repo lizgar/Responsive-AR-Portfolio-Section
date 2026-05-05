@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AR Marker Test</title>
+
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/aframe-ar.js"></script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+        font-family: Arial, sans-serif;
+      }
+
+      .label {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 9999;
+        padding: 10px 14px;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.72);
+        color: white;
+        font-size: 14px;
+      }
+
+      .close {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 9999;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(0, 0, 0, 0.72);
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      .a-enter-vr,
+      .a-enter-ar,
+      .a-orientation-modal,
+      .a-loader-title {
+        display: none !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="label">Apunta la cámara al marcador Hiro</div>
+    <button class="close" onclick="window.location.href='./'">Volver</button>
+
+    <a-scene
+      embedded
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+      renderer="alpha: true; antialias: true; logarithmicDepthBuffer: true;"
+      arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;"
+    >
+      <a-marker preset="hiro">
+        <a-box
+          position="0 0.5 0"
+          scale="0.7 0.7 0.7"
+          material="opacity: 0.9;"
+        ></a-box>
+      </a-marker>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+</html>
