@@ -2,14 +2,15 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
+    <title>Portafolio WebAR - MindAR</title>
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <title>AR Image Tracking - Mew</title>
 
-    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.8/aframe/build/aframe-ar-nft.js"></script>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
     <style>
       html,
@@ -18,232 +19,62 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background: #000;
         font-family: Arial, sans-serif;
       }
 
-      #start-screen {
+      a-scene {
+        width: 100%;
+        height: 100%;
+      }
+
+      .ar-message {
         position: fixed;
-        inset: 0;
-        z-index: 99999;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
-        padding: 24px;
-        background: #050509;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        background: rgba(0, 0, 0, 0.75);
         color: white;
-        text-align: center;
-      }
-
-      #start-screen button,
-      .close {
-        padding: 12px 18px;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        background: #00d4ff;
-        color: #001018;
-        font-weight: 700;
-        cursor: pointer;
-      }
-
-      .label {
-        position: fixed;
-        top: 16px;
-        left: 16px;
-        z-index: 9999;
-        padding: 10px 14px;
-        border-radius: 10px;
-        background: rgba(0, 0, 0, 0.72);
-        color: white;
-        font-size: 14px;
-      }
-
-      .close {
-        position: fixed;
-        top: 16px;
-        right: 16px;
-        z-index: 9999;
-        background: rgba(0, 0, 0, 0.72);
-        color: white;
-      }
-
-      #debug {
-        position: fixed;
-        bottom: 12px;
-        left: 12px;
-        right: 12px;
-        z-index: 9999;
-        padding: 8px 10px;
+        padding: 10px 16px;
         border-radius: 8px;
-        background: rgba(0, 0, 0, 0.72);
-        color: #00ff88;
-        font-size: 12px;
-        line-height: 1.4;
-      }
-
-      .a-enter-vr,
-      .a-enter-ar,
-      .a-orientation-modal,
-      .a-loader-title {
-        display: none !important;
-      }
-
-      video,
-      .arjs-video {
-        position: fixed !important;
-        inset: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        object-fit: cover !important;
-        z-index: 1 !important;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-      }
-
-      a-scene,
-      canvas.a-canvas {
-        position: fixed !important;
-        inset: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        z-index: 2 !important;
-        background: transparent !important;
+        font-size: 14px;
+        text-align: center;
       }
     </style>
   </head>
 
   <body>
-    <div id="start-screen">
-      <h1>Realidad Aumentada</h1>
-      <p>
-        Presiona iniciar, permite el acceso a la cámara y apunta a la carta Mew.
-      </p>
-      <button id="start-button">Iniciar cámara AR</button>
+    <div id="message" class="ar-message">
+      Apunta la cámara hacia la imagen marcador
     </div>
 
-    <div class="label">Apunta la cámara a la carta Mew</div>
-    <button class="close" onclick="window.location.href='./'">Volver</button>
-    <div id="debug">Estado: esperando inicio...</div>
-
-    <div id="ar-root"></div>
+    <a-scene
+      mindar-image="imageTargetSrc: https://lizgar.github.io/ImgDesignare/targets.mind; autoStart: true;"
+      color-space="sRGB"
+      renderer="colorManagement: true, physicallyCorrectLights"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+      embedded
+    >
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-plane color="blue" opaciy="0.5" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
+      </a-entity>
+     
+    </a-scene>
 
     <script>
-      const startScreen = document.getElementById("start-screen");
-      const startButton = document.getElementById("start-button");
-      const arRoot = document.getElementById("ar-root");
-      const debug = document.getElementById("debug");
+      const target = document.querySelector("#target");
+      const message = document.querySelector("#message");
 
-      const NFT_BASE = "./nft/mew-front";
-
-      function setDebug(message) {
-        debug.textContent = "Estado: " + message;
-        console.log("[AR DEBUG]", message);
-      }
-
-      async function checkNFTFiles() {
-        const files = [".fset", ".fset3", ".iset"];
-
-        for (const ext of files) {
-          const url = NFT_BASE + ext;
-          const response = await fetch(url, { method: "HEAD" });
-
-          if (!response.ok) {
-            throw new Error(`No se encontró ${url} | status ${response.status}`);
-          }
-        }
-      }
-
-      async function createARScene() {
-        setDebug("verificando archivos NFT...");
-
-        try {
-          await checkNFTFiles();
-          setDebug("archivos NFT encontrados. Creando escena...");
-        } catch (error) {
-          setDebug(error.message);
-          console.error(error);
-          return;
-        }
-
-        arRoot.innerHTML = `
-          <a-scene
-            embedded
-            vr-mode-ui="enabled: false"
-            device-orientation-permission-ui="enabled: false"
-            renderer="alpha: true; antialias: true; logarithmicDepthBuffer: true;"
-            arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
-          >
-            <a-nft
-              type="nft"
-              url="${NFT_BASE}"
-              smooth="true"
-              smoothCount="10"
-              smoothTolerance="0.01"
-              smoothThreshold="5"
-              emitevents="true"
-            >
-              <a-box
-                color="red"
-                depth="40"
-                height="40"
-                width="40"
-                position="100 100 0"
-              ></a-box>
-            </a-nft>
-
-            <a-entity camera></a-entity>
-          </a-scene>
-        `;
-
-        setDebug("escena creada, solicitando cámara...");
-      }
-
-      startButton.addEventListener("click", async () => {
-        startScreen.style.display = "none";
-        await createARScene();
-
-        setTimeout(() => {
-          const videos = document.querySelectorAll("video");
-          const canvas = document.querySelector("canvas");
-
-          setDebug(
-            "videos encontrados: " +
-              videos.length +
-              " | canvas: " +
-              (canvas ? "sí" : "no")
-          );
-
-          videos.forEach((video) => {
-            video.setAttribute("playsinline", "");
-            video.setAttribute("muted", "");
-            video.play().catch((error) => {
-              setDebug("video play error: " + error.name);
-            });
-          });
-        }, 2500);
+      target.addEventListener("targetFound", () => {
+        console.log("[MindAR] Imagen detectada");
+        message.textContent = "Imagen detectada";
       });
 
-      window.addEventListener("arjs-nft-loaded", () => {
-        setDebug("NFT cargado. Apunta a la carta.");
-      });
-
-      window.addEventListener("markerFound", () => {
-        setDebug("Carta detectada.");
-      });
-
-      window.addEventListener("markerLost", () => {
-        setDebug("Carta perdida. Vuelve a apuntar a la carta.");
-      });
-
-      window.addEventListener("error", (event) => {
-        setDebug("error: " + event.message);
-      });
-
-      window.addEventListener("unhandledrejection", (event) => {
-        setDebug("promise error: " + event.reason);
+      target.addEventListener("targetLost", () => {
+        console.log("[MindAR] Imagen perdida");
+        message.textContent = "Apunta la cámara hacia la imagen marcador";
       });
     </script>
   </body>
