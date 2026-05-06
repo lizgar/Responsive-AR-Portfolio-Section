@@ -218,7 +218,7 @@ export function HeroSection({ onExplore }: { onExplore?: () => void }) {
         transition={{ delay: 1.2 }}
         style={{
           position: "absolute",
-          bottom: 85,
+          bottom: 5,
           left: "50%",
           transform: "translateX(-50%)",
           display: "flex",
@@ -231,7 +231,7 @@ export function HeroSection({ onExplore }: { onExplore?: () => void }) {
         }}
         onClick={onExplore}
       >
-        <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, letterSpacing: "0.15em" }}>
+        <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 14, letterSpacing: "0.15em" }}>
           SCROLL
         </span>
         <motion.div

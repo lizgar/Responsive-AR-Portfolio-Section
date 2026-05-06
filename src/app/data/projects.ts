@@ -29,13 +29,13 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: 1,
-    title: "Guerrero Élfico",
-    subtitle: "Personaje Riggeado",
+    title: "Mew - Pokémon",
+    subtitle: "Fan art",
     category: "CHARACTER",
     categoryColor: "#00d4ff",
     description:
-      "Personaje de alta resolución con esqueleto completo, controles faciales y pesos de skin optimizados para animación en tiempo real y visualización AR.",
-    tags: ["Character", "Full Rig", "Skin Weights", "PBR", "Game-Ready"],
+      "Marcador de Realidad Aumentada.",
+    tags: ["Character", "AR"],
     specs: {
       polygons: "45,200",
       textures: "4K PBR Set",
@@ -46,12 +46,11 @@ export const projects: Project[] = [
       format: "GLB / USDZ",
     },
     // ─── EDITAR: Reemplaza con tus rutas reales ───
-    modelPath: "https://lizgar.github.io/ImgDesignare/Mew.glb",
+    modelPath: `${import.meta.env.BASE_URL}modelos/mew.glb`,
     iosModelPath: "./src/app/data/projects/mew-pokemon_1K.usdz",
-    posterImage:
-      "https://lizgar.github.io/ImgDesignare/Mew_Front.png",
+    posterImage:`${import.meta.env.BASE_URL}modelos/Mew_Front.png`,
     featured: true,
-    year: "2024",
+    year: "2023",
   },
   /*{
     id: 2,
