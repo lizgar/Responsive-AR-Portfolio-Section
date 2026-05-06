@@ -3,12 +3,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { Filter, ChevronDown } from "lucide-react";
 
 import { HeroSection } from "./components/HeroSection";
-import { StatsBar } from "./components/StatsBar";
 import { ProjectCard } from "./components/ProjectCard";
 import { ViewerModal } from "./components/ViewerModal";
-import { ARGuide } from "./components/ARGuide";
 import { FeaturedProject } from "./components/FeaturedProject";
-import { CTASection } from "./components/CTASection";
 import { projects, type Project } from "./data/projects";
 
 // ─── Load model-viewer script ───────────────────────────────────────────────
@@ -108,32 +105,10 @@ function Navbar({ onExplore }: { onExplore: () => void }) {
 
       {/* Nav links */}
       <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-        {[
-          { label: "Galería", href: "#gallery" },
-          { label: "Guía AR", href: "#ar-guide" },
-          { label: "Destacados", href: "#featured" },
-        ].map((link) => (
-          <a
-            key={link.label}
-            href={link.href}
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: 13,
-              color: "#7878a0",
-              textDecoration: "none",
-              transition: "color 0.2s",
-              letterSpacing: "0.02em",
-            }}
-            onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#d0d0f0")}
-            onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#7878a0")}
-            className="hidden sm:inline"
-          >
-            {link.label}
-          </a>
-        ))}
-
         <button
-          onClick={onExplore}
+          onClick={() => {
+    window.open("https://animako.net/berchello/", "_blank");
+  }}
           style={{
             fontFamily: "'Space Grotesk', sans-serif",
             fontWeight: 600,
@@ -154,7 +129,7 @@ function Navbar({ onExplore }: { onExplore: () => void }) {
             (e.currentTarget as HTMLButtonElement).style.background = "rgba(0,212,255,0.08)";
           }}
         >
-          Ver Modelos 3D
+          Volver a Portafolio BERCHELLO
         </button>
       </div>
     </nav>
@@ -322,100 +297,6 @@ function GallerySection({
   );
 }
 
-// ─── Featured Section ────────────────────────────────────────────────────────
-function FeaturedSection({ onSelect }: { onSelect: (p: Project) => void }) {
-  const featured = projects.filter((p) => p.featured);
-
-  return (
-    <section
-      id="featured"
-      style={{
-        padding: "80px 24px 80px",
-        background: "#0a0a13",
-        borderTop: "1px solid rgba(255,255,255,0.05)",
-        borderBottom: "1px solid rgba(255,255,255,0.05)",
-      }}
-    >
-      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          style={{ textAlign: "center", marginBottom: 72 }}
-        >
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              marginBottom: 16,
-              padding: "5px 16px",
-              borderRadius: 40,
-              border: "1px solid rgba(255,215,0,0.3)",
-              background: "rgba(255,215,0,0.06)",
-            }}
-          >
-            <span style={{ fontSize: 12 }}>⭐</span>
-            <span
-              style={{
-                fontFamily: "'Space Mono', monospace",
-                fontSize: 10,
-                color: "#ffd700",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-              }}
-            >
-              Proyectos Destacados
-            </span>
-          </div>
-
-          <h2
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 700,
-              fontSize: "clamp(1.6rem, 3.5vw, 2.4rem)",
-              color: "#f0f0ff",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            Obras{" "}
-            <span
-              style={{
-                background: "linear-gradient(135deg, #ffd700, #ff6b35)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              Principales
-            </span>
-          </h2>
-        </motion.div>
-
-        {/* Featured items */}
-        <style>{`
-          @media (max-width: 768px) {
-            .featured-grid {
-              grid-template-columns: 1fr !important;
-              direction: ltr !important;
-            }
-          }
-        `}</style>
-
-        {featured.map((project, i) => (
-          <FeaturedProject
-            key={project.id}
-            project={project}
-            onSelect={onSelect}
-            reverse={i % 2 !== 0}
-          />
-        ))}
-      </div>
-    </section>
-  );
-}
-
 // ─── Main App ────────────────────────────────────────────────────────────────
 export default function App() {
   useModelViewer();
@@ -486,19 +367,8 @@ export default function App() {
       {/* Hero */}
       <HeroSection onExplore={scrollToGallery} />
 
-     
-
       {/* Gallery */}
       <GallerySection onSelect={setSelectedProject} />
-
-      {/* AR Guide */}
-      <ARGuide />
-
-      {/* Featured */}
-      <FeaturedSection onSelect={setSelectedProject} />
-
-      {/* CTA */}
-      <CTASection />
 
       {/* 3D Viewer Modal */}
       {selectedProject && (
@@ -507,51 +377,7 @@ export default function App() {
           onClose={() => setSelectedProject(null)}
         />
       )}
-
-      {/* Mobile AR floating button */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2 }}
-        style={{
-          position: "fixed",
-          bottom: 20,
-          right: 20,
-          zIndex: 90,
-        }}
-        className="sm:hidden"
-      >
-        <style>{`
-          @media (min-width: 640px) { .sm\\:hidden { display: none !important; } }
-          @keyframes mobile-ar-pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,136,0.5); }
-            50% { box-shadow: 0 0 0 14px rgba(0,255,136,0); }
-          }
-        `}</style>
-        <button
-          onClick={scrollToGallery}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            padding: "13px 20px",
-            borderRadius: 50,
-            border: "1px solid rgba(0,255,136,0.5)",
-            background: "rgba(10,10,20,0.95)",
-            color: "#00ff88",
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontWeight: 700,
-            fontSize: 13,
-            cursor: "pointer",
-            backdropFilter: "blur(16px)",
-            animation: "mobile-ar-pulse 2.5s ease-in-out infinite",
-            letterSpacing: "0.03em",
-          }}
-        >
-          <span style={{ fontSize: 16 }}>📱</span>
-          Ver en AR
-        </button>
-      </motion.div>
+  
     </div>
   );
 }

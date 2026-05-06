@@ -357,7 +357,7 @@ export function ProjectCard({ project, index, onSelect }: ProjectCardProps) {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                onSelect(project);
+                window.location.href = `${import.meta.env.BASE_URL}ar-marker.html`;
               }}
               style={{
                 display: "flex",

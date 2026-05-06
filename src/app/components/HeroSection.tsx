@@ -93,7 +93,7 @@ export function HeroSection({ onExplore }: { onExplore?: () => void }) {
             letterSpacing: "-0.02em",
           }}
         >
-          Portafolio{" "}
+          Colección tarjetas{" "}
           <span
             style={{
               color: "#00d4ff",
