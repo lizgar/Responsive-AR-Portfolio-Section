@@ -327,7 +327,6 @@ export function ViewerModal({ project, onClose }: ViewerModalProps) {
               )}
 
               {/* model-viewer */}
-              
               <>
                 <model-viewer
                   ref={modelViewerRef}
